@@ -1,7 +1,25 @@
-@(message: String)
+@(message: String, addressForm: Form[Address])
+@implicitFieldConstructor = @{ helper.FieldConstructor(twitterBootstrapInput.render) }
 
-@main("Welcome to Play") {
+@main("Welcome to Play Email List") {
 
-    @play20.welcome(message, style = "Java")
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a id="titleLink" class="brand" href="/">@message.toUpperCase</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul id="addresses"></ul>
+
+        @helper.form(action = routes.Application.addAddress(), 'class -> "well form-horizontal") {
+            @helper.inputText(addressForm("contents"), '_label -> "Contents")
+            <div class="controls">
+                <input type="submit" class="btn btn-primary"/>
+            </div>
+        }
+    </div>
 
 }
