@@ -15,7 +15,7 @@
         <ul id="addresses"></ul>
 
         @helper.form(action = routes.Application.addAddress(), 'class -> "well form-horizontal") {
-            @helper.inputText(addressForm("contents"), '_label -> "Contents")
+            @helper.inputText(addressForm("address"), '_label -> "Email Address")
             <div class="controls">
                 <input type="submit" class="btn btn-primary"/>
             </div>

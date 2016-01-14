@@ -17,13 +17,19 @@ import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class Application extends Controller{
 
-	
-    private static AddressService addressService = new AddressServiceImpl();
+	static final Logger logger = LoggerFactory.getLogger(Controller.class);
+
+	@Autowired
+    private static AddressService addressService;
 
     public static Result index() {
+    	logger.debug("Generated a generic homepage.");
         return play.mvc.Controller.ok(index.render("Play Email List", Form.form(Address.class)));
     }
 

@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-test" % "4.1.1.RELEASE" % "test",
   "org.hibernate" % "hibernate-entitymanager" % "5.0.7.Final",
   "mysql" % "mysql-connector-java" % "5.1.35",
-  "org.mockito" % "mockito-core" % "1.9.5" % "test"
+  "org.mockito" % "mockito-core" % "1.9.5" % "test",
+  "org.slf4j" % "log4j-over-slf4j" % "1.7.12"
 )
 
 libraryDependencies += "org.webjars" % "bootstrap" % "2.1.1"
