@@ -3,7 +3,6 @@ package controllers;
 import models.Address;
 
 import services.AddressService;
-import services.AddressServiceImpl;
 import forms.AddressForm;
 
 import org.slf4j.Logger;
@@ -20,31 +19,30 @@ import play.mvc.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@org.springframework.stereotype.Controller
 public class Application extends Controller{
 
-	static final Logger logger = LoggerFactory.getLogger(Controller.class);
+	final Logger logger = LoggerFactory.getLogger(Controller.class);
 
 	@Autowired
-    private static AddressService addressService;
+    private AddressService addressService;
 
-    public static Result index() {
+    public Result index() {
     	logger.debug("Generated a generic homepage.");
-        return play.mvc.Controller.ok(index.render("Play Email List", Form.form(Address.class)));
+        return play.mvc.Controller.ok(index.render(Form.form(AddressForm.class)));
     }
 
-    public static Result addAddress() {
-        // play.data.Form<models.Address> form = play.data.Form.form(models.Address.class).bindFromRequest();
-        // models.Address address = form.get();
-        // //address.save();
-        // return redirect(routes.Application.index());
+    public Result addAddress() throws Exception {
 
-
-        Form<Address> form = Form.form(Address.class).bindFromRequest();
+        Form<AddressForm> form = Form.form(AddressForm.class).bindFromRequest();
         if (form.hasErrors()) {
-            return play.mvc.Controller.badRequest(index.render("Play Email List",form));
+            return play.mvc.Controller.badRequest(index.render(form));
         }
-        Address address = form.get();
+
+        AddressForm addressForm = form.get();
+        Address address = new Address();
+        address.setAddress(addressForm.getAddress());
+
         addressService.addAddress(address);
         return redirect(routes.Application.index());
     }
