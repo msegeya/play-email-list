@@ -21,6 +21,6 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "log4j-over-slf4j" % "1.7.12"
 )
 
-libraryDependencies += "org.webjars" % "bootstrap" % "2.1.1"
+libraryDependencies += "org.webjars" % "jquery" % "1.11.2"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
