@@ -12,6 +12,7 @@
 </div>
 
 <div class="container">
+	<b>Addresses in List:</b>
 	<ul id="addresses"></ul>
 
 	@helper.form(action = routes.Application.addAddress, 'class -> "well form-horizontal") {
@@ -24,7 +25,7 @@
 }
 <div>
 	<b></b> @helper.inputText(form("address"), '_showConstraints -> false)
-	<input type = "submit" class = "btn btn-default" name = "Go" value = "Add email"></button>
+	<input type = "submit" class = "btn btn-default" name = "Go" value = "Add to list"></button>
 </div>
 }
 </div>

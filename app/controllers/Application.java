@@ -23,20 +23,42 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+* Controller for application. 
+* <p> 
+* Gets all the view and model to talk to eachother. 
+*/
+
 @org.springframework.stereotype.Controller
 public class Application extends Controller{
 
 	final Logger logger = LoggerFactory.getLogger(Controller.class);
 
+	// use injection to set up the addressService for talking to the database. 
 	@Autowired
     private AddressService addressService;
 
+	/**
+	* Builds the homepage and returns.
+	* @return the homepage
+	*/
     public Result index() {
     	logger.info("Generated a generic homepage.");
         return play.mvc.Controller.ok(index.render(Form.form(AddressForm.class)));
     }
 
-    public Result addAddress() throws Exception {
+    /**
+    *	Talks to both the form and the service to try and add a new address. 
+    * <p>
+    * Extracts information from the form. If the form is blank it diplays an error. 
+    * <p>
+    *  Passes information from the form to the data service to store.
+    * if the data service storage already contains the information, it catches 
+    * the exception and displays the error message. 
+	*
+    * @return the result to be displayed to the user. 
+    */
+    public Result addAddress(){
     	logger.info("Collecting new result... ");
         Form<AddressForm> form = Form.form(AddressForm.class).bindFromRequest();
         if (form.hasErrors()) {
