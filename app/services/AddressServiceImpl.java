@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.EntityExistsException;
+
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -21,14 +23,19 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @Transactional
     public void addAddress(Address address) {
-        em.persist(address);
-    }
 
-    @Override
-    public List<Address> getAllAddresses() {
-        CriteriaQuery<Address> c = em.getCriteriaBuilder().createQuery(Address.class);
-        c.from(Address.class);
-        return em.createQuery(c).getResultList();
-    }
+        try{ 
+            em.persist(address);
+        }catch(EntityExistsException e){
+            
+        }
+   }
+
+   @Override
+   public List<Address> getAllAddresses() {
+    CriteriaQuery<Address> c = em.getCriteriaBuilder().createQuery(Address.class);
+    c.from(Address.class);
+    return em.createQuery(c).getResultList();
+}
 
 }

@@ -8,6 +8,7 @@ import forms.AddressForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import views.html.index;
 
@@ -49,7 +50,12 @@ public class Application extends Controller{
 
         logger.info("Got a new address: {}", address.getAddress());
 
-        addressService.addAddress(address);
+        try{
+        	addressService.addAddress(address);
+        }catch (DataIntegrityViolationException e){
+        	form.reject("address","Address already exists in the list.");
+        	return play.mvc.Controller.badRequest(index.render(form));
+        }
         return redirect(routes.Application.index());
     }
 
