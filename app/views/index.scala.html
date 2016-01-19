@@ -1,33 +1,34 @@
-@import forms.AddressForm
-@(form: play.data.Form[AddressForm])
+@import forms.AddressForm @(form: play.data.Form[AddressForm])
 
 @main("Welcome to Play-Email-List") {
 
 <div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<a id="titleLink" class="brand" href="/">Welcome to Play-Email-List</a>
-		</div>
-	</div>
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a id="titleLink" class="brand" href="/">Welcome to
+        Play-Email-List</a>
+    </div>
+  </div>
 </div>
 
 <div class="container">
-	<b>Addresses in List:</b>
-	<ul id="addresses"></ul>
+  <b>Addresses in List:</b>
+  <ul id="addresses"></ul>
 
-	@helper.form(action = routes.Application.addAddress, 'class -> "well form-horizontal") {
-	@if(form.hasGlobalErrors) {
-	          <div>
-		            <p>
-			              <span>@Messages(form.globalError.message)</span>
-		            </p>
-	          </div>
-}
-<div>
-	<b></b> @helper.inputText(form("address"), '_showConstraints -> false)
-	<input type = "submit" class = "btn btn-default" name = "Go" value = "Add to list"></button>
+  @helper.form(action = routes.Application.addAddress, 'class -> "well
+  form-horizontal") { @if(form.hasGlobalErrors) {
+  <div>
+    <p>
+      <span>@Messages(form.globalError.message)</span>
+    </p>
+  </div>
+  }
+  <div>
+    <b></b> @helper.inputText(form("address"), '_showConstraints -> false)
+    <input type="submit" class="btn btn-default" name="Go"
+      value="Add to list">
+    </button>
+  </div>
+  }
 </div>
-}
-</div>
-
 }

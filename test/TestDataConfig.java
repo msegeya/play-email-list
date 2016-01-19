@@ -10,33 +10,32 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-
 @Configuration
 @EnableTransactionManagement
 public class TestDataConfig extends DataConfig {
 
-	// need to override Entity Manager Factory to allow tests to run correctly. 
-	@Bean
-	@Override
-	public EntityManagerFactory entityManagerFactory() {
-		HibernateJpaVendorAdapter va = new HibernateJpaVendorAdapter();
-		va.setGenerateDdl(true);
-		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-		emf.setPackagesToScan("models");
-		emf.setJpaVendorAdapter(va);
-		emf.setDataSource(dataSource());
-		emf.afterPropertiesSet();
-		return emf.getObject();
-	}
+    // need to override Entity Manager Factory to allow tests to run correctly.
+    @Bean
+    @Override
+    public EntityManagerFactory entityManagerFactory() {
+        HibernateJpaVendorAdapter va = new HibernateJpaVendorAdapter();
+        va.setGenerateDdl(true);
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+        emf.setPackagesToScan("models");
+        emf.setJpaVendorAdapter(va);
+        emf.setDataSource(dataSource());
+        emf.afterPropertiesSet();
+        return emf.getObject();
+    }
 
-	// override the datasource so we don't have to actually connect to the DB. 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.h2.Driver");
-		dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-		return dataSource;
-	}
+    // override the datasource so we don't have to actually connect to the DB.
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        return dataSource;
+    }
 
 }
