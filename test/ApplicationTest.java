@@ -1,46 +1,73 @@
-import forms.AddressForm;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.*;
 
-import play.mvc.*;
+import play.mvc.Http;
+
 import play.test.*;
-import play.data.DynamicForm;
-import play.data.Form;
-import play.twirl.api.Html;
-import play.data.validation.ValidationError;
-import play.data.validation.Constraints.RequiredValidator;
-import play.i18n.Lang;
-import play.libs.F;
-import play.libs.F.*;
-import play.twirl.api.Content;
+
+import java.util.HashMap;
+
+import play.mvc.Result;
+
+import static org.mockito.Mockito.*;
 
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
 /**
- *
  * Simple (JUnit) tests that can call all parts of a play app. If you are interested in mocking a whole application, see the wiki
  * for more details.
- *
  */
-public class ApplicationTest {
+public class ApplicationTest extends WithApplication {
+
+    @Before
+    public void setUp() throws Exception {
+        Http.Context context = mock(Http.Context.class);
+        Http.Context.current.set(context);
+    }
 
     @Test
-    public void indexTemplate() {
+    public void testAddAddressAddDuplicate() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Address", "c@c");
+
         running(fakeApplication(), new Runnable() {
+            @Override
             public void run() {
-                Form<AddressForm> form = Form.form(AddressForm.class);
-                Html html = views.html.index.render(form);
-                assertThat(contentType(html)).isEqualTo("text/html");
-                assertThat(contentAsString(html)).contains("Play-Email-List");
+
+                Result result = callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
+                assertThat(status(result)).isEqualTo(BAD_REQUEST);
+                assertThat(contentAsString(result)).contains("Address already exists in the list.");
             }
         });
     }
 
+    @Test
+    public void testAddAddressEmpty(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Address", "");
+
+        running(fakeApplication(), new Runnable() {
+            @Override
+            public void run() {
+                Result result = callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
+                assertThat(status(result)).isEqualTo(BAD_REQUEST);
+                assertThat(contentAsString(result)).contains("This field is required");
+            }
+        });
+    }
+
+    @Test
+    public void testAddAddressNotAddress(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Address", "blah<>!@#$&%*^()'");
+
+        running(fakeApplication(), new Runnable() {
+            @Override
+            public void run() {
+                Result result = callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
+                assertThat(status(result)).isEqualTo(BAD_REQUEST);
+                assertThat(contentAsString(result)).contains("Valid email required");
+            }
+        });
+    }
 }

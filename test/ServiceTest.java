@@ -1,3 +1,4 @@
+
 import static org.fest.assertions.Assertions.assertThat;
 
 import configs.AppConfig;
@@ -6,7 +7,11 @@ import models.Address;
 
 import services.AddressService;
 
+import org.springframework.dao.DataIntegrityViolationException;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -21,14 +26,17 @@ public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private AddressService barService;
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
     // Tests that an Address object can be created and used to store a string.
     // also used as a helper method to test data storage service.
     @Test
     public void createBar() {
         Address bar = new Address();
-        bar.setAddress("foo");
+        bar.setAddress("bar");
         barService.addAddress(bar);
-        assertThat(bar.getAddress()).isEqualTo("foo");
+        assertThat(bar.getAddress()).isEqualTo("bar");
     }
 
     // Tests that when an object is added to the data service the data service grows in length.
