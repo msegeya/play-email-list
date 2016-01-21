@@ -1,4 +1,5 @@
-@import forms.AddressForm @(form: play.data.Form[AddressForm])
+@import forms.AddressForm 
+@(form: play.data.Form[AddressForm])
 
 @main("Welcome to Play-Email-List") {
 
@@ -15,8 +16,7 @@
   <b>Addresses in List:</b>
   <ul id="addresses"></ul>
 
-  @helper.form(action = routes.Application.addAddress, 'class -> "well
-  form-horizontal") { @if(form.hasGlobalErrors) {
+  @helper.form(action = routes.Application.addAddress, 'class -> "wellform-horizontal") { @if(form.hasGlobalErrors) {
   <div>
     <p>
       <span>@Messages(form.globalError.message)</span>

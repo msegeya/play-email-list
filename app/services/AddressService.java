@@ -12,11 +12,11 @@ public interface AddressService {
     /**
      * Method to insert an an address into the database.
      */
-    public void addAddress(Address address);
+    void addAddress(Address address);
 
     /**
-     * Method to retreave all the addresses in the database.
+     * Method to retrieve all the addresses in the database.
      */
-    public List<Address> getAllAddresses();
+    List<Address> getAllAddresses();
 
 }

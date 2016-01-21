@@ -18,16 +18,13 @@ import play.mvc.Result;
 import play.mvc.Controller;
 import play.Play;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  * Controller for application.
  * <p>
- * Gets all the view and model to talk to eachother.
+ * Gets all the view and model to talk to each other.
  */
 
 @org.springframework.stereotype.Controller
@@ -52,7 +49,7 @@ public class Application extends Controller {
     /**
      * Talks to both the form and the service to try and add a new address.
      * <p>
-     * Extracts information from the form. If the form is blank it diplays an error.
+     * Extracts information from the form. If the form is blank it displays an error.
      * <p>
      * Passes information from the form to the data service to store. if the data service storage already contains the information,
      * it catches the exception and displays the error message.

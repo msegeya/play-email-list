@@ -1,7 +1,6 @@
 package services;
 
 import models.Address;
-import configs.DataConfig;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.EntityExistsException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class AddressServiceImpl implements AddressService {
+
+    final Logger log = LoggerFactory.getLogger(AddressServiceImpl.class);
 
     @PersistenceContext
     EntityManager em;
@@ -28,6 +32,7 @@ public class AddressServiceImpl implements AddressService {
     public void addAddress(Address address) throws DataIntegrityViolationException {
 
         try {
+            log.debug("Attempting to store {}.", address.toString());
             em.persist(address);
         } catch (EntityExistsException e) {
 

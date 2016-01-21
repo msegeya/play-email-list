@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import play.Play;
 
-import java.util.HashMap;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
