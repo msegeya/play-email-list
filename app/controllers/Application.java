@@ -42,7 +42,7 @@ public class Application extends Controller {
      * @return the homepage
      */
     public Result index() {
-        log.debug("Generated a generic homepage.");
+        log.debug("Generated a homepage.");
         return play.mvc.Controller.ok(index.render(Form.form(AddressForm.class)));
     }
 
@@ -57,12 +57,12 @@ public class Application extends Controller {
      * @return the result to be displayed to the user.
      */
     public Result addAddress() {
-        log.debug("Collecting new result... ");
+        log.debug("Collecting new input... ");
         Form<AddressForm> form = Form.form(AddressForm.class).bindFromRequest();
 
         // check the form for errors.
         if (form.hasErrors()) {
-            log.debug("Bad input on result.");
+            log.debug("Bad input.");
             return play.mvc.Controller.badRequest(index.render(form));
         }
 
@@ -78,7 +78,7 @@ public class Application extends Controller {
             // this will get thrown if the address already exists in the DB.
             // if this happens, notify the user that the address was in the DB.
             form.reject("address", Play.application().configuration().getString("msg.duplicate"));
-            log.info("Address '{}' was already in DB. Notfying user.", address.getAddress());
+            log.info("Address '{}' was already in DB. Notifying user.", address.getAddress());
             return play.mvc.Controller.badRequest(index.render(form));
         }
         // Display the homepage.
