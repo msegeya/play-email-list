@@ -8,9 +8,9 @@ import play.data.validation.Constraints.Required;
  */
 public class AddressForm {
     // validate that input is an email.
-    @play.data.validation.Constraints.Email
+    @Email
     // validate that the input is non-empty.
-    @play.data.validation.Constraints.Required
+    @Required
     private String address;
 
     public String getAddress() {

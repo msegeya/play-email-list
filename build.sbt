@@ -7,6 +7,7 @@ scalaVersion := "2.11.1"
 libraryDependencies ++= Seq(
   javaCore,
   javaWs % "test",
+  javaJdbc,
   "com.h2database" % "h2" % "1.4.181",
   "org.webjars" % "bootstrap" % "2.1.1",
   "org.springframework" % "spring-context" % "4.1.1.RELEASE",

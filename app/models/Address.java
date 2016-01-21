@@ -21,10 +21,6 @@ public class Address {
         this.address = address;
     }
 
-    public Address() { // empty constructor for Spring.
-
-    }
-
     public String toString() { // toString method because they are your friend.
         return "Address: " + address;
     }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import play.Play;
+import play.db.DB;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -57,12 +58,6 @@ public class DataConfig {
      */
     @Bean
     public DataSource dataSource() {
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Play.application().configuration().getString("db.default.driver"));
-        dataSource.setUrl(Play.application().configuration().getString("db.default.url"));
-        dataSource.setUsername(Play.application().configuration().getString("db.default.user"));
-        dataSource.setPassword(Play.application().configuration().getString("db.default.password"));
-        log.info("Created DataSource");
-        return dataSource;
+       return DB.getDataSource();
     }
 }
