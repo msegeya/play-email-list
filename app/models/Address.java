@@ -1,9 +1,8 @@
 package models;
 
-import javax.persistence.Table;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Data model to hold an email address object.

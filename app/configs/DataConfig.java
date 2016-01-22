@@ -1,21 +1,19 @@
 package configs;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import play.db.DB;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import play.Play;
+import play.db.DB;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 /**
  * Configures the Hibernate to manage the database connection.
@@ -58,6 +56,6 @@ public class DataConfig {
      */
     @Bean
     public DataSource dataSource() {
-       return DB.getDataSource();
+        return DB.getDataSource();
     }
 }

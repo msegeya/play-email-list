@@ -1,9 +1,8 @@
 package services;
 
-import java.util.List;
-
 import models.TLD;
 
+import java.util.List;
 
 public interface TLDService {
     //return all TLDs in the DB.

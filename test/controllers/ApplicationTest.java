@@ -1,25 +1,16 @@
 package controllers;
 
-import java.util.HashMap;
-
-import org.junit.*;
-import static org.mockito.Mockito.*;
-
+import org.junit.Before;
+import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
-
-import static play.test.Helpers.BAD_REQUEST;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.contentAsString;
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.fakeRequest;
-import static play.test.Helpers.running;
-import static play.test.Helpers.status;
-
 import play.test.WithApplication;
 
+import java.util.HashMap;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static play.test.Helpers.*;
 
 /**
  * Simple (JUnit) tests that can call all parts of a play app. If you are interested in mocking a whole application, see the wiki
@@ -36,7 +27,7 @@ public class ApplicationTest extends WithApplication {
     @Test
     public void testAddAddressAddDuplicate() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("Address", "c@c");
+        map.put("Address", "c@c.com");
 
         running(fakeApplication(), new Runnable() {
             @Override
@@ -50,7 +41,7 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressEmpty(){
+    public void testAddAddressEmpty() {
         HashMap<String, String> map = new HashMap<>();
         map.put("Address", "");
 
@@ -65,7 +56,7 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressNotAddress(){
+    public void testAddAddressNotAddress() {
         HashMap<String, String> map = new HashMap<>();
         map.put("Address", "blah<>!@#$&%*^()'");
 

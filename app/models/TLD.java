@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 // data model to hold TLDs for validation.
 @Entity
 @Table(name = "tlds")
@@ -15,11 +14,12 @@ public class TLD {
     @Column(name = "tld")
     private String domain;
 
-    public void setDomain(String domain){
-        this.domain = domain;
-    }
-    public String getDomain(){
+    public String getDomain() {
         return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public String toString() { // toString method because they are your friend.
@@ -27,17 +27,18 @@ public class TLD {
     }
 
     @Override
-    public boolean equals(Object object){
+    public boolean equals(Object object) {
         boolean isEqual = false;
-        if(object == null){
+        if (object == null) {
             return false;
-        }
-        else if(object instanceof TLD){
-            isEqual = (this.domain.equals(((TLD) object).domain));
-        }else if (object instanceof String){
+        } else if (object instanceof TLD) {
+            isEqual = (this.domain.equals(((TLD)object).domain));
+        } else if (object instanceof String) {
             isEqual = (this.domain.equals(object));
         }
         return isEqual;
     }
+
+    //TODO hashcode
 
 }

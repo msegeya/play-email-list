@@ -1,34 +1,27 @@
 package services;
 
 import configs.AppConfig;
-
-import java.util.List;
-
 import models.Address;
-
-import static org.fest.assertions.Assertions.assertThat;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import services.AddressService;
+import java.util.List;
 
+import static org.fest.assertions.Assertions.assertThat;
 
 @ContextConfiguration(classes = {
-    AppConfig.class, config.TestDataConfig.class
+                AppConfig.class, config.TestDataConfig.class
 })
 public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-    @Autowired
-    private AddressService barService;
-
     @Rule
     public final ExpectedException exception = ExpectedException.none();
+    @Autowired
+    private AddressService barService;
 
     // Tests that an Address object can be created and used to store a string.
     // also used as a helper method to test data storage service.

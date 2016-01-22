@@ -18,5 +18,4 @@ public interface AddressService {
      * Method to retrieve all the addresses in the database.
      */
     List<Address> getAllAddresses();
-
 }

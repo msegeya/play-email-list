@@ -14,7 +14,7 @@ public class AddressForm {
     @Required
     private String address;
 
-    public AddressForm(){
+    public AddressForm() {
     }
 
     public String getAddress() {

@@ -1,29 +1,23 @@
 package controllers;
 
-import models.Address;
-
 import forms.AddressForm;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import models.Address;
 import models.TLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import play.Play;
 import play.data.Form;
 import play.libs.Json;
-import play.mvc.Result;
 import play.mvc.Controller;
-import play.Play;
-
+import play.mvc.Result;
 import services.AddressService;
 import services.TLDService;
-
 import views.html.index;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for application.
@@ -34,7 +28,7 @@ import views.html.index;
 @org.springframework.stereotype.Controller
 public class Application extends Controller {
 
-    final Logger log = LoggerFactory.getLogger(Controller.class);
+    private final static Logger log = LoggerFactory.getLogger(Application.class);
 
     private List<TLD> tlds;
 
@@ -52,7 +46,7 @@ public class Application extends Controller {
      */
     public Result index() {
         log.debug("Generated a homepage.");
-        return play.mvc.Controller.ok(index.render(Form.form(AddressForm.class)));
+        return ok(index.render(Form.form(AddressForm.class)));
     }
 
     /**
@@ -73,7 +67,7 @@ public class Application extends Controller {
         // check the form for errors.
         if (form.hasErrors()) {
             log.debug("Bad input.");
-            return play.mvc.Controller.badRequest(index.render(form));
+            return badRequest(index.render(form));
         }
 
         // create a new address object to contain the information from the form.
@@ -83,10 +77,10 @@ public class Application extends Controller {
 
         // validate the address has a TLD.
         String msg = validate(address.getAddress());
-        if(msg != null){
+        if (msg != null) {
             //address does not have a TLD, return error.
             form.reject("address", msg);
-            return play.mvc.Controller.badRequest(index.render(form));
+            return badRequest(index.render(form));
         }
 
         // try to store the new address in the database.
@@ -97,7 +91,7 @@ public class Application extends Controller {
             // if this happens, notify the user that the address was in the DB.
             form.reject("address", Play.application().configuration().getString("msg.duplicate"));
             log.info("Address '{}' was already in DB. Notifying user.", address.getAddress());
-            return play.mvc.Controller.badRequest(index.render(form));
+            return badRequest(index.render(form));
         }
         // Display the homepage.
         return redirect(routes.Application.index());
@@ -120,40 +114,45 @@ public class Application extends Controller {
         }
 
         // convert the form list to json and return.
-        return play.mvc.Controller.ok(Json.toJson(af));
+        return ok(Json.toJson(af));
     }
 
     //Validate address has TLD.
-    private String validate(String address){
+    private String validate(String address) {
         log.debug("Validating TLD.");
-        if(tlds == null){
+        if (tlds == null) {
             log.debug("tlds was null, getting all tlds.");
             tlds = tldService.getAllTLDs();
         }
-        //try and grab from the '.' to the end
-        String[] splitAddress = address.split("\\.");
+        if (address.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:" +
+                            "[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f]" +
+                            ")*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\" +
+                            "[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
 
-        if(splitAddress.length <= 1){
-            return "Address does not have valid domain i.e. '.com'";
-        }
+            //try and grab from the '.' to the end
+            String[] splitAddress = address.split("\\.");
+            if (splitAddress.length <= 1) {
+                return Play.application().configuration().getString("msg.noTLD");
+            }
 
-        String domain = splitAddress[splitAddress.length - 1];
+            String domain = splitAddress[splitAddress.length - 1];
+            if (domain.contains("@")) {
+                return Play.application().configuration().getString("msg.noTLD");
+            }
 
-        if(domain.contains("@")){
-            return "Address does not have valid domain i.e. '.com'";
-        }
+            log.debug("Extracted domain: {} from Address: ", domain, address);
+            TLD toValidate = new TLD();
+            toValidate.setDomain(domain.toUpperCase());
 
-        log.debug("Extracted domain: {} from Address: ", domain, address);
-        TLD toValidate = new TLD();
-        toValidate.setDomain(domain.toUpperCase());
-
-        // check if the TLD is in the list.
-        if (tlds.contains(toValidate)){
-            return null;
-        }
-        else{
-            log.info("Unable to find domain: {}", domain);
-            return "Domain '" + domain.toLowerCase() + "' is not a valid Top Level Domain.";
+            // check if the TLD is in the list.
+            if (tlds.contains(toValidate)) {
+                return null;
+            } else {
+                log.info("Unable to find domain: {}", domain);
+                return String.format(Play.application().configuration().getString("msg.invalidTLD"), domain.toLowerCase());
+            }
+        } else {
+            return Play.application().configuration().getString("msg.enterValidEmail");
         }
     }
 }

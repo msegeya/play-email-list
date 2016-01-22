@@ -1,25 +1,21 @@
 package services;
 
-import java.util.List;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import models.TLD;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 @Service
 public class TLDServiceImpl implements TLDService {
 
+    final Logger log = LoggerFactory.getLogger(TLDServiceImpl.class);
     @PersistenceContext
     EntityManager em;
-
-    final Logger log = LoggerFactory.getLogger(TLDServiceImpl.class);
 
     @Override
     public List<TLD> getAllTLDs() {
