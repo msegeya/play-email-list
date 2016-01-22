@@ -20,6 +20,7 @@ import java.util.List;
  * Controller for application.
  * <p>
  * Gets all the view and model to talk to each other.
+ * Requires an addressService to store and lookup addresses and a TLDService to lookup TLDs.
  */
 
 @org.springframework.stereotype.Controller
@@ -51,12 +52,11 @@ public class Application extends Controller {
     /**
      * Talks to both the form and the service to try and add a new address.
      * <p>
-     * Extracts information from the form. If the form is blank it displays an error.
+     * Extracts information from the form. If the form does not contain email, it displays an error.
      * <p>
-     * Passes information from the form to the data service to store. if the data service storage already contains the information,
-     * it catches the exception and displays the error message.
+     * Passes information from the form to the data service to store. If the data service already contains the information it displays an error.
      *
-     * @return the result to be displayed to the user.
+     * @return the resulting page to be displayed to the user.
      */
     public Result addAddress() {
         log.debug("Collecting new input... ");
@@ -72,7 +72,7 @@ public class Application extends Controller {
         // create a new address object to contain the information from the form.
         Address address = new Address();
         address.setAddress(form.get().getAddress());
-        log.info("Got a new address: '{}'", address.getAddress());
+        log.info("Got new input: '{}'", address.getAddress());
 
         // validate the address has a TLD.
         String msg = validate(address.getAddress());
@@ -95,7 +95,7 @@ public class Application extends Controller {
     }
 
     /**
-     * Builds a json list of the addresses in the DB.
+     * Builds a list of the addresses in the DB. Used to display addresses in DB to user in index generation.
      */
     private List<Address> listAddress() {
         // Get the addresses from the DB.
@@ -104,7 +104,19 @@ public class Application extends Controller {
         return al;
     }
 
-    // Validate address has TLD.
+    /**
+     * Validate that a String is an email address. Used in conjunction with @Required and @Email validations on input form.
+     * <p>
+     * Needs tlds to be set for the class and contain a list of valid TLDs.
+     * <p>
+     * Requires that the String does not contain '..' then splits string on periods.
+     * Requires that result of split is at least length 2.
+     * Then requires that the last substring from the split does not contain '@'.
+     * Finally compares that substring against list of TLDs. If a match is found the string is accepted.
+     *
+     * @param address the String to validate.
+     * @return Null if String is an email, or message detailing why String is not an email.
+     */
     private String validate(String address) {
         log.debug("Validating TLD.");
 
