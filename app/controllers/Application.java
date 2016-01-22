@@ -8,14 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import play.Play;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.AddressService;
 import services.TLDService;
 import views.html.index;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
