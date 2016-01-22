@@ -21,26 +21,26 @@ public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
     @Autowired
-    private AddressService barService;
+    private AddressService addressService;
 
     // Tests that an Address object can be created and used to store a string.
     // also used as a helper method to test data storage service.
     @Test
-    public void createBar() {
-        Address bar = new Address();
-        bar.setAddress("bar");
-        barService.addAddress(bar);
-        assertThat(bar.getAddress()).isEqualTo("bar");
+    public void addAddressTest() {
+        Address addr = new Address();
+        addr.setAddress("bar");
+        addressService.addAddress(addr);
+        assertThat(addr.getAddress()).isEqualTo("bar");
     }
 
     // Tests that when an object is added to the data service the data service grows in length.
     @Test
-    public void getBars() {
-        List<Address> bars = barService.getAllAddresses();
-        int ds = bars.size();
-        createBar();
-        bars = barService.getAllAddresses();
-        assertThat(bars.size()).isEqualTo(ds + 1);
+    public void testAddAddressLonger() {
+        List<Address> addressList = addressService.getAllAddresses();
+        int size = addressList.size();
+        addAddressTest();
+        addressList = addressService.getAllAddresses();
+        assertThat(addressList.size()).isEqualTo(size + 1);
     }
-
+//TODO: make more robust.
 }
