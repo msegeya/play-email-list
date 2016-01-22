@@ -1,25 +1,26 @@
-
-import static org.fest.assertions.Assertions.assertThat;
+package services;
 
 import configs.AppConfig;
 
+import java.util.List;
+
 import models.Address;
 
-import services.AddressService;
-
-import org.springframework.dao.DataIntegrityViolationException;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import java.util.List;
+import services.AddressService;
+
 
 @ContextConfiguration(classes = {
-    AppConfig.class, TestDataConfig.class
+    AppConfig.class, config.TestDataConfig.class
 })
 public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
