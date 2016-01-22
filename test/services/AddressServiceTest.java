@@ -16,7 +16,7 @@ import static org.fest.assertions.Assertions.assertThat;
 @ContextConfiguration(classes = {
                 AppConfig.class, config.TestDataConfig.class
 })
-public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
