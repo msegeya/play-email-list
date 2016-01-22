@@ -5,7 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-// data model to hold TLDs for validation.
+/**
+ * Data model to hold TLDs for comparison by the app.
+ * Compares to other TLDs based only on the 'domain' string. 
+ */
 @Entity
 @Table(name = "tlds")
 public class TLD {

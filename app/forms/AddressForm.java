@@ -8,7 +8,7 @@ import javax.persistence.Column;
 /**
  * Form to ask user for an email address.
  * <p>
- *     address must pass play's Email and Required validations. 
+ *     address must pass play's Email and Required validations.
  * </p>
  */
 public class AddressForm {
