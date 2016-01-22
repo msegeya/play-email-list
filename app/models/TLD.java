@@ -27,6 +27,11 @@ public class TLD {
     }
 
     @Override
+    public int hashCode() {
+        return domain.hashCode();
+    }
+
+    @Override
     public boolean equals(Object object) {
         boolean isEqual = false;
         if (object == null) {
@@ -38,7 +43,5 @@ public class TLD {
         }
         return isEqual;
     }
-
-    //TODO hashcode
 
 }
