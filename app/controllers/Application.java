@@ -117,42 +117,46 @@ public class Application extends Controller {
         return ok(Json.toJson(af));
     }
 
-    //Validate address has TLD.
+    // Validate address has TLD.
     private String validate(String address) {
         log.debug("Validating TLD.");
-        if (tlds == null) {
+
+        if (tlds == null) {   //TODO: move to constructor.
             log.debug("tlds was null, getting all tlds.");
             tlds = tldService.getAllTLDs();
         }
-        if (address.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:" +
-                            "[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f]" +
-                            ")*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\" +
-                            "[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
 
-            //try and grab from the '.' to the end
-            String[] splitAddress = address.split("\\.");
-            if (splitAddress.length <= 1) {
-                return Play.application().configuration().getString("msg.noTLD");
-            }
-
-            String domain = splitAddress[splitAddress.length - 1];
-            if (domain.contains("@")) {
-                return Play.application().configuration().getString("msg.noTLD");
-            }
-
-            log.debug("Extracted domain: {} from Address: ", domain, address);
-            TLD toValidate = new TLD();
-            toValidate.setDomain(domain.toUpperCase());
-
-            // check if the TLD is in the list.
-            if (tlds.contains(toValidate)) {
-                return null;
-            } else {
-                log.info("Unable to find domain: {}", domain);
-                return String.format(Play.application().configuration().getString("msg.invalidTLD"), domain.toLowerCase());
-            }
-        } else {
-            return Play.application().configuration().getString("msg.enterValidEmail");
+        // Check for double period.
+        if (address.contains("..")) {
+            return Play.application().configuration().getString("msg.doublePeriod");
         }
+
+        // try and grab from the '.' to the end
+        String[] splitAddress = address.split("\\.");
+        if (splitAddress.length <= 1) {
+            // if the array length is 1, there is no period.
+            return Play.application().configuration().getString("msg.noTLD");
+        }
+
+        String domain = splitAddress[splitAddress.length - 1];
+        if (domain.contains("@")) {
+            // if the last substring contains an @ then the address was like: 'a.b@c'
+            return Play.application().configuration().getString("msg.noTLD");
+        }
+
+        log.debug("Extracted domain: {} from Address: ", domain, address);
+        TLD toValidate = new TLD();
+        toValidate.setDomain(domain.toUpperCase());
+
+        // check if the TLD is in the list.
+        if (tlds.contains(toValidate)) {
+            // TLD was in list. All is well: return null.
+            return null;
+        }
+
+        // unable to validate TLD, return error.
+        log.info("Unable to find domain: {}", domain);
+        return String.format(Play.application().configuration().getString("msg.invalidTLD"), domain.toLowerCase());
     }
 }
+
