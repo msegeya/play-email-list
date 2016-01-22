@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan({
-    "controllers", "services"
+    "controllers", "services", "forms"
 })
 // Have spring scan the controllers and services directories.
 public class AppConfig {
