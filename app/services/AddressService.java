@@ -12,7 +12,7 @@ public interface AddressService {
     /**
      * Method to insert an an address into the database.
      */
-    void addAddress(Address address);
+    boolean addAddress(Address address);
 
     /**
      * Method to retrieve all the addresses in the database.

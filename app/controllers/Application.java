@@ -6,7 +6,6 @@ import models.TLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import play.Play;
 import play.data.Form;
 import play.libs.Json;
@@ -37,7 +36,7 @@ public class Application extends Controller {
     private AddressService addressService;
 
     @Autowired
-    public Application(TLDService tldService){
+    public Application(TLDService tldService) {
         tlds = tldService.getAllTLDs();
     }
 
@@ -85,16 +84,14 @@ public class Application extends Controller {
             return badRequest(index.render(form));
         }
 
-        // try to store the new address in the database.
-        try {
-            addressService.addAddress(address);
-        } catch (DataIntegrityViolationException e) {
-            // this will get thrown if the address already exists in the DB.
-            // if this happens, notify the user that the address was in the DB.
+        // try to add the address to the DB.
+        // will return false if address was in DB, in which case we should inform the user.
+        if (!addressService.addAddress(address)) {
             form.reject("address", Play.application().configuration().getString("msg.duplicate"));
             log.info("Address '{}' was already in DB. Notifying user.", address.getAddress());
             return badRequest(index.render(form));
         }
+
         // Display the homepage.
         return redirect(routes.Application.index());
     }

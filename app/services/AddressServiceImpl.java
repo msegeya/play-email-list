@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,22 +22,22 @@ public class AddressServiceImpl implements AddressService {
     /**
      * Attempt to insert an address into the database. Catch an exception if the entity is already in the database.
      */
-    @Override
     @Transactional
-    public void addAddress(Address address) {
-
-        try {
-            log.debug("Attempting to store {}.", address.toString());
+    public boolean addAddress(Address address) {
+        if (checkUnique(address)) {
             em.persist(address);
-        } catch (EntityExistsException ignored) {
-
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkUnique(Address address) {
+        return (em.find(Address.class, address.getAddress()) == null);
     }
 
     /**
      * Return a list of all addresses stored in the database.
      */
-    @Override
     public List<Address> getAllAddresses() {
         CriteriaQuery<Address> c = em.getCriteriaBuilder().createQuery(Address.class);
         c.from(Address.class);
