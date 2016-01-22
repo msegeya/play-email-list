@@ -2,15 +2,16 @@ package controllers;
 
 import models.Address;
 
-import services.AddressService;
 import forms.AddressForm;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import views.html.index;
 
 import play.data.Form;
 import play.libs.Json;
@@ -18,8 +19,9 @@ import play.mvc.Result;
 import play.mvc.Controller;
 import play.Play;
 
-import java.util.List;
-import java.util.ArrayList;
+import services.AddressService;
+
+import views.html.index;
 
 /**
  * Controller for application.

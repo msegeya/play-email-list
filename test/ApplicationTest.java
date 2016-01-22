@@ -1,16 +1,23 @@
-import org.junit.*;
-
-import play.mvc.Http;
-
-import play.test.*;
 
 import java.util.HashMap;
 
-import play.mvc.Result;
-
+import org.junit.*;
 import static org.mockito.Mockito.*;
 
-import static play.test.Helpers.*;
+import play.mvc.Http;
+import play.mvc.Result;
+
+import static play.test.Helpers.BAD_REQUEST;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.contentAsString;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.running;
+import static play.test.Helpers.status;
+
+import play.test.WithApplication;
+
+
 import static org.fest.assertions.Assertions.*;
 
 /**
