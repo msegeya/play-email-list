@@ -15,7 +15,7 @@ public class TLDServiceImpl implements TLDService {
 
     final Logger log = LoggerFactory.getLogger(TLDServiceImpl.class);
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public List<TLD> getAllTLDs() {
