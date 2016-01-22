@@ -1,7 +1,6 @@
-@(form: play.data.Form[forms.AddressForm])
+@(form: play.data.Form[forms.AddressForm], addressList: List[models.Address])
 
 @main("Welcome to Play-Email-List") {
-    <script src="@routes.Assets.at("javascripts/index.js")" type="text/javascript"></script>
 
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -14,7 +13,9 @@
 
     <div class="container">
         <b>Addresses in List:</b>
-        <ul id="addresses"></ul>
+        @for(address <- addressList) {
+        <li>@address.getAddress</li>
+        }
 
         @helper.form(action = routes.Application.addAddress, 'class -> "wellform-horizontal") {
             @if(form.hasGlobalErrors) {

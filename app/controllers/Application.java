@@ -47,7 +47,7 @@ public class Application extends Controller {
      */
     public Result index() {
         log.debug("Generated a homepage.");
-        return ok(index.render(Form.form(AddressForm.class)));
+        return ok(index.render(Form.form(AddressForm.class), listAddress()));
     }
 
     /**
@@ -68,7 +68,7 @@ public class Application extends Controller {
         // check the form for errors.
         if (form.hasErrors()) {
             log.debug("Bad input.");
-            return badRequest(index.render(form));
+            return badRequest(index.render(form, listAddress()));
         }
 
         // create a new address object to contain the information from the form.
@@ -81,7 +81,7 @@ public class Application extends Controller {
         if (msg != null) {
             //address does not have a TLD, return error.
             form.reject("address", msg);
-            return badRequest(index.render(form));
+            return badRequest(index.render(form, listAddress()));
         }
 
         // try to add the address to the DB.
@@ -89,7 +89,7 @@ public class Application extends Controller {
         if (!addressService.addAddress(address)) {
             form.reject("address", Play.application().configuration().getString("msg.duplicate"));
             log.info("Address '{}' was already in DB. Notifying user.", address.getAddress());
-            return badRequest(index.render(form));
+            return badRequest(index.render(form, listAddress()));
         }
 
         // Display the homepage.
@@ -99,21 +99,11 @@ public class Application extends Controller {
     /**
      * Builds a json list of the addresses in the DB.
      */
-    public Result listAddress() {
+    private List<Address> listAddress() {
         // Get the addresses from the DB.
         List<Address> al = addressService.getAllAddresses();
         log.info("Returning list of stored addresses. Length: {}", al.size());
-        List<AddressForm> af = new ArrayList<AddressForm>();
-
-        // loop through them, wrap in forms, store in a list.
-        for (Address i : al) {
-            AddressForm aform = new AddressForm();
-            aform.setAddress(i.getAddress());
-            af.add(aform);
-        }
-
-        // convert the form list to json and return.
-        return ok(Json.toJson(af));
+        return al;
     }
 
     // Validate address has TLD.
