@@ -37,7 +37,9 @@ public class Application extends Controller {
     private AddressService addressService;
 
     @Autowired
-    private TLDService tldService;
+    public Application(TLDService tldService){
+        tlds = tldService.getAllTLDs();
+    }
 
     /**
      * Builds the homepage and returns.
@@ -120,11 +122,6 @@ public class Application extends Controller {
     // Validate address has TLD.
     private String validate(String address) {
         log.debug("Validating TLD.");
-
-        if (tlds == null) {   //TODO: move to constructor.
-            log.debug("tlds was null, getting all tlds.");
-            tlds = tldService.getAllTLDs();
-        }
 
         // Check for double period.
         if (address.contains("..")) {
