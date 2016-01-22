@@ -7,6 +7,7 @@ import forms.AddressForm;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.TLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ import play.mvc.Controller;
 import play.Play;
 
 import services.AddressService;
+import services.TLDService;
 
 import views.html.index;
 
@@ -34,9 +36,14 @@ public class Application extends Controller {
 
     final Logger log = LoggerFactory.getLogger(Controller.class);
 
+    private List<TLD> tlds;
+
     // use injection to set up the addressService for talking to the database.
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private TLDService tldService;
 
     /**
      * Builds the homepage and returns.
@@ -60,6 +67,7 @@ public class Application extends Controller {
      */
     public Result addAddress() {
         log.debug("Collecting new input... ");
+
         Form<AddressForm> form = Form.form(AddressForm.class).bindFromRequest();
 
         // check the form for errors.
@@ -72,6 +80,14 @@ public class Application extends Controller {
         Address address = new Address();
         address.setAddress(form.get().getAddress());
         log.info("Got a new address: '{}'", address.getAddress());
+
+        // validate the address has a TLD.
+        String msg = validate(address.getAddress());
+        if(msg != null){
+            //address does not have a TLD, return error.
+            form.reject("address", msg);
+            return play.mvc.Controller.badRequest(index.render(form));
+        }
 
         // try to store the new address in the database.
         try {
@@ -105,5 +121,30 @@ public class Application extends Controller {
 
         // convert the form list to json and return.
         return play.mvc.Controller.ok(Json.toJson(af));
+    }
+
+    //Validate address has TLD.
+    private String validate(String address){
+        log.debug("Validating TLD.");
+        if(tlds == null){
+            log.debug("tlds was null, getting all tlds.");
+            tlds = tldService.getAllTLDs();
+        }
+        //try and grab from the '.' to the end
+        String[] splitAddress = address.split("\\.");
+        String domain = splitAddress[splitAddress.length - 1];
+
+        log.debug("Extracted domain: {} from Address: ", domain, address);
+        TLD toValidate = new TLD();
+        toValidate.setDomain(domain.toUpperCase());
+
+        // check if the TLD is in the list.
+        if (tlds.contains(toValidate)){
+            return null;
+        }
+        else{
+            log.info("Unable to find domain: {}", domain);
+            return "Domain '" + domain.toLowerCase() + "' is not a valid Top Level Domain.";
+        }
     }
 }

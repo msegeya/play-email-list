@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tlds")
 public class TLD {
+
     @Id
     @Column(name = "tld")
     private String domain;
