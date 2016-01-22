@@ -42,5 +42,16 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
         addressList = addressService.getAllAddresses();
         assertThat(addressList.size()).isEqualTo(size + 1);
     }
-//TODO: make more robust.
+
+    @Test
+    public void addAddressDuplicateTest() {
+        Address a1 = new Address();
+        a1.setAddress("a");
+        Address a2 = new Address();
+        a2.setAddress("a");
+        // first should be true since object is NOT in DB.
+        assertThat(addressService.addAddress(a1)).isEqualTo(true);
+        // second should be false since object IS in DB.  
+        assertThat(addressService.addAddress(a2)).isEqualTo(false);
+    }
 }
