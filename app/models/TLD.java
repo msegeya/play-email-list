@@ -1,9 +1,10 @@
 package models;
 
 import javax.persistence.Column;
-import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 // data model to hold TLDs for validation.
 @Entity

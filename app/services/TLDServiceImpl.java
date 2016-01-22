@@ -1,16 +1,17 @@
 package services;
 
-import models.TLD;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
-
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaQuery;
+
+import models.TLD;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.stereotype.Service;
+
 
 @Service
 public class TLDServiceImpl implements TLDService {
