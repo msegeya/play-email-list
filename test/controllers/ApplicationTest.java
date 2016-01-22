@@ -32,7 +32,7 @@ public class ApplicationTest extends WithApplication {
         running(fakeApplication(), new Runnable() {
             @Override
             public void run() {
-
+                callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
                 Result result = callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
                 assertThat(status(result)).isEqualTo(BAD_REQUEST);
                 assertThat(contentAsString(result)).contains("Address already exists in the list.");
