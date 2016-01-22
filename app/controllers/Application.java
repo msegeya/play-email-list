@@ -132,7 +132,16 @@ public class Application extends Controller {
         }
         //try and grab from the '.' to the end
         String[] splitAddress = address.split("\\.");
+
+        if(splitAddress.length <= 1){
+            return "Address does not have valid domain i.e. '.com'";
+        }
+
         String domain = splitAddress[splitAddress.length - 1];
+
+        if(domain.contains("@")){
+            return "Address does not have valid domain i.e. '.com'";
+        }
 
         log.debug("Extracted domain: {} from Address: ", domain, address);
         TLD toValidate = new TLD();
