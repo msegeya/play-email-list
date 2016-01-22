@@ -1,4 +1,4 @@
-
+package services;
 
 import configs.AppConfig;
 
@@ -20,7 +20,7 @@ import services.AddressService;
 
 
 @ContextConfiguration(classes = {
-    AppConfig.class, TestDataConfig.class
+    AppConfig.class, config.TestDataConfig.class
 })
 public class ServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
