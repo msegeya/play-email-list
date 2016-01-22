@@ -51,7 +51,26 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
         a2.setAddress("a");
         // first should be true since object is NOT in DB.
         assertThat(addressService.addAddress(a1)).isEqualTo(true);
-        // second should be false since object IS in DB.  
+        // second should be false since object IS in DB.
         assertThat(addressService.addAddress(a2)).isEqualTo(false);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addAddressNullObjectTest(){
+        Address none = null;
+        addressService.addAddress(none);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addAddressNullStringTest(){
+        Address nully = new Address();
+        addressService.addAddress(nully);
+    }
+
+    @Test
+    public void addAddressEmptyTest(){
+        Address empty = new Address();
+        empty.setAddress("");
+        addressService.addAddress(empty);
     }
 }
