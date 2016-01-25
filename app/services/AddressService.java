@@ -12,7 +12,7 @@ public interface AddressService {
     /**
      * Method to try to insert an an address into the database.
      * <p>
-     *     Method will return FALSE if the insert fails.
+     * Method will return FALSE if the insert fails.
      *
      * @Return {@link Boolean}, {@link Boolean#TRUE} if the insert succeeds and {@link Boolean#FALSE} otherwise.
      */
