@@ -20,7 +20,7 @@ public class AddressServiceImpl implements AddressService {
     private EntityManager em;
 
     /**
-     * Attempt to insert an address into the database. Catch an exception if the entity is already in the database.
+     * Attempt to insert an address into the database.
      */
     @Transactional
     public boolean addAddress(Address address) {

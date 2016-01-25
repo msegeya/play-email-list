@@ -7,7 +7,6 @@ import javax.persistence.Table;
 
 /**
  * Data model to hold TLDs for comparison by the app.
- * Compares to other TLDs based only on the 'domain' string. 
  */
 @Entity
 @Table(name = "tlds")
@@ -35,6 +34,10 @@ public class TLD {
     }
 
     @Override
+    /**
+     * Compares to other TLDs based only on the 'domain' string.
+     * @Return Boolean, True iff the 'domain' strings of both objects match.
+     */
     public boolean equals(Object object) {
         boolean isEqual = false;
         if (object == null) {
