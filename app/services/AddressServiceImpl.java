@@ -20,7 +20,7 @@ public class AddressServiceImpl implements AddressService {
     private EntityManager em;
 
     /**
-     * Attempt to insert an address into the database.
+     * Attempt to insert an {@link Address} into the database.
      */
     @Transactional
     public boolean addAddress(Address address) {
@@ -36,7 +36,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     /**
-     * Return a list of all addresses stored in the database.
+     * Return a {@link List<Address>} of all {@link Address} objects stored in the database.
      */
     public List<Address> getAllAddresses() {
         CriteriaQuery<Address> c = em.getCriteriaBuilder().createQuery(Address.class);

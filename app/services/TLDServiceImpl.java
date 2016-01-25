@@ -10,6 +10,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+/**
+ * Implementation of {@link TLDService}, provides method to get a list of all {@link TLD} objects stored in database.
+ */
 @Service
 public class TLDServiceImpl implements TLDService {
 

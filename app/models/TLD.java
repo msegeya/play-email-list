@@ -6,7 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Data model to hold TLDs for comparison by the app.
+ * Data model to hold a Top Level Domain for comparison by the app.
+ * Common examples of TLDs are: .com, .org, .net
  */
 @Entity
 @Table(name = "tlds")
@@ -35,8 +36,8 @@ public class TLD {
 
     @Override
     /**
-     * Compares to other TLDs based only on the 'domain' string.
-     * @Return Boolean, True iff the 'domain' strings of both objects match.
+     * Compares to other {@link TLD} based only on the 'domain' string.
+     * @Return {@link Boolean}, {@link Boolean#TRUE} iff the 'domain' strings of both objects match.
      */
     public boolean equals(Object object) {
         boolean isEqual = false;

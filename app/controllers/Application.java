@@ -20,7 +20,8 @@ import java.util.List;
  * Controller for application.
  * <p>
  * Gets all the view and model to talk to each other.
- * Requires an addressService to store and lookup addresses and a TLDService to lookup TLDs.
+ * Requires an {@link AddressService} to store and lookup {@link Address} objects
+ * and a {@link TLDService} to lookup {@link TLD} objects in the database.
  */
 
 @org.springframework.stereotype.Controller
@@ -50,11 +51,11 @@ public class Application extends Controller {
     }
 
     /**
-     * Talks to both the form and the service to try and add a new address.
+     * Talks to both the {@link AddressForm} and the {@link AddressService} to try and add a new {@link Address}.
      * <p>
      * Extracts information from the form. If the form does not contain email, it displays an error.
      * <p>
-     * Passes information from the form to the data service to store. If the data service already contains the information it displays an error.
+     * Passes information from the form to the address data service to store. If the data service already contains the information it displays an error.
      *
      * @return the resulting page to be displayed to the user.
      */
@@ -105,14 +106,16 @@ public class Application extends Controller {
     }
 
     /**
-     * Validate that a String is an email address. Used in conjunction with @Required and @Email validations on input form.
+     * Validate that a {@link String} is an email address. Used in conjunction with @Required and @Email
+     * validations on {@link AddressForm}.
      * <p>
-     * Needs tlds to be set for the class and contain a list of valid TLDs.
+     * Needs {@link Application#tlds} to be set for the class and contain a list of valid {@link TLD}s.
+     * This can be set using {@link TLDService#getAllTLDs()}.
      * <p>
      * Requires that the String does not contain '..' then splits string on periods.
      * Requires that result of split is at least length 2.
      * Then requires that the last substring from the split does not contain '@'.
-     * Finally compares that substring against list of TLDs. If a match is found the string is accepted.
+     * Finally compares that substring against list of {@link TLD}s. If a match is found the string is accepted.
      *
      * @param address the String to validate.
      * @return Null if String is an email, or message detailing why String is not an email.

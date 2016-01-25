@@ -14,14 +14,15 @@ public interface AddressService {
      * <p>
      *     Method will return FALSE if the insert fails.
      *
-     * @Return True if the insert succeeds and False otherwise.
+     * @Return {@link Boolean}, {@link Boolean#TRUE} if the insert succeeds and {@link Boolean#FALSE} otherwise.
      */
     boolean addAddress(Address address);
 
     /**
      * Method to retrieve all the addresses in the database.
      *
-     * @Return A List containing all the Address Objects in the database. List will be empty if the database is empty.
+     * @Return A {@link List<Address>} containing all the {@link Address} Objects in the database.
+     * List will be empty if the database is empty.
      */
     List<Address> getAllAddresses();
 }
