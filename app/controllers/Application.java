@@ -106,12 +106,15 @@ public class Application extends Controller {
     }
 
     /**
-     * Validate that a {@link String} is an email address. Used in conjunction with @Required and @Email
-     * validations on {@link AddressForm}.
+     * Validate that a {@link String} is an email address. Used in conjunction with @Required
+     * validation on {@link AddressForm}.
      * <p>
      * Needs {@link Application#tlds} to be set for the class and contain a list of valid {@link TLD}s.
      * This can be set using {@link TLDService#getAllTLDs()}.
      * <p>
+     * Checks that string passes initial regex (looks roughly like an email).
+     * Checks that the overall length is less than 255.
+     * Checks that the local length is less than 65.
      * Requires that the String does not contain '..' then splits string on periods.
      * Requires that result of split is at least length 2.
      * Then requires that the last substring from the split does not contain '@'.
@@ -123,13 +126,35 @@ public class Application extends Controller {
     private String validate(String address) {
         log.debug("Validating TLD.");
 
+        // verify address meets regex, stolen from Play's email validation, but removed length constraints since they were not helpful
+        // and are enforced below.
+        final java.util.regex.Pattern regex = java.util.regex.Pattern.compile("\\b[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\b");
+        if(!regex.matcher(address).matches()){
+            return Play.application().configuration().getString("msg.addressNotMatch");
+        }
+
+        //split the address on the @
+        String[] splitAddress = address.split("@");
+
+        // check the overall length of the address.
+        if(address.length() > 254){
+            log.info("Overall address is too long. Length: {}", address.length());
+            return String.format(Play.application().configuration().getString("msg.addressTooLongOverall"), address.length());
+        }
+
+        //check 'local' part for length.
+        if(splitAddress[0].length() > 64){
+            log.info("Local part of address is too long. Length: {}", splitAddress[0].length());
+            return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0], splitAddress[0].length());
+        }
+
         // Check for double period.
         if (address.contains("..")) {
             return Play.application().configuration().getString("msg.doublePeriod");
         }
 
         // try and grab from the '.' to the end
-        String[] splitAddress = address.split("\\.");
+        splitAddress = address.split("\\.");
         if (splitAddress.length <= 1) {
             // if the array length is 1, there is no period.
             return Play.application().configuration().getString("msg.noTLD");
