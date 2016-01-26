@@ -1,7 +1,5 @@
 package configs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -21,8 +19,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class DataConfig {
-
-    final Logger log = LoggerFactory.getLogger(DataConfig.class);
 
     /**
      * Bean of a Entity Manager Factory that creates an entity manager.
