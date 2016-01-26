@@ -65,7 +65,7 @@ public class ApplicationTest extends WithApplication {
             public void run() {
                 Result result = callAction(controllers.routes.ref.Application.addAddress(), fakeRequest().withFormUrlEncodedBody(map));
                 assertThat(status(result)).isEqualTo(BAD_REQUEST);
-                assertThat(contentAsString(result)).contains("Valid email required");
+                assertThat(contentAsString(result)).contains("Please enter a valid email.");
             }
         });
     }
