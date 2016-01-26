@@ -31,6 +31,12 @@ public class AddressServiceImpl implements AddressService {
         return false;
     }
 
+    /**
+     * Helper method to ensure that an insertion to the database doesn't exist already in the database.
+     *
+     * @param address {@link Address} object of the address to be checked.
+     * @return {@link Boolean}, True if the object was NOT in the database, False if it WAS.
+     */
     private boolean checkUnique(Address address) {
         return (em.find(Address.class, address.getAddress()) == null);
     }
