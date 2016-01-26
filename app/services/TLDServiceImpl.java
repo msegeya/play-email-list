@@ -23,7 +23,6 @@ public class TLDServiceImpl implements TLDService {
     @Override
     public List<TLD> getAllTLDs() {
         log.debug("getting all the TLDs");
-
         CriteriaQuery<TLD> c = em.getCriteriaBuilder().createQuery(TLD.class);
         c.from(TLD.class);
         return em.createQuery(c).getResultList();
