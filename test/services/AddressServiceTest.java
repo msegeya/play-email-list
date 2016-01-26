@@ -83,4 +83,39 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
         empty.setAddress("");
         addressService.addAddress(empty);
     }
+
+    // Tests that deleteAddress can delete items from the DB.
+    @Test
+    public void deleteAddressTest(){
+        Address a = new Address();
+        a.setAddress("a");
+        Address b = new Address();
+        b.setAddress("b");
+        int initialSize = addressService.getAllAddresses().size();
+        assertThat(addressService.addAddress(a)).isEqualTo(true);
+        assertThat(addressService.addAddress(b)).isEqualTo(true);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(2);
+        addressService.deleteAddress(a);
+        addressService.deleteAddress(b);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(initialSize);
+    }
+
+    @Test
+    public void deleteAddressNonexistentTest(){
+        Address a = new Address();
+        a.setAddress("a");
+        addressService.deleteAddress(a);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteAddressNullTest(){
+        Address a = null;
+        addressService.deleteAddress(a);
+    }
+
+    @Test(expected = javax.persistence.PersistenceException.class)
+    public void deleteAddressNullStringTest(){
+        Address a = new Address();
+        addressService.deleteAddress(a);
+    }
 }

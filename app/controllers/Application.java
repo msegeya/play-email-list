@@ -96,9 +96,9 @@ public class Application extends Controller {
     }
 
     /**
-     * Remove an address from the database. Address better be in there!
+     * Remove an address from the database.
      * @param address The address to be removed.
-     * @return Redirects to a redraw of the homepage. 
+     * @return Redirects to a redraw of the homepage.
      */
     public Result deleteAddress(String address){
         log.info("Deleting address: {}", address);
