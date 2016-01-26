@@ -86,7 +86,7 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     // Tests that deleteAddress can delete items from the DB.
     @Test
-    public void deleteAddressTest(){
+    public void deleteAddressTest() {
         Address a = new Address();
         a.setAddress("a");
         Address b = new Address();
@@ -101,20 +101,20 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     }
 
     @Test
-    public void deleteAddressNonexistentTest(){
+    public void deleteAddressNonexistentTest() {
         Address a = new Address();
         a.setAddress("a");
         addressService.deleteAddress(a);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void deleteAddressNullTest(){
+    public void deleteAddressNullTest() {
         Address a = null;
         addressService.deleteAddress(a);
     }
 
     @Test(expected = javax.persistence.PersistenceException.class)
-    public void deleteAddressNullStringTest(){
+    public void deleteAddressNullStringTest() {
         Address a = new Address();
         addressService.deleteAddress(a);
     }
