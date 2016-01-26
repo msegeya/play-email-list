@@ -53,7 +53,7 @@ public class Application extends Controller {
     /**
      * Talks to both the {@link AddressForm} and the {@link AddressService} to try and add a new {@link Address}.
      * <p>
-     * Extracts information from the form. If the form does not contain email, it displays an error.
+     * Extracts information from the form and validates as an email address.  If the form does not contain an email address, it displays an error.
      * <p>
      * Passes information from the form to the address data service to store. If the data service already contains the information it displays an error.
      *
@@ -138,13 +138,13 @@ public class Application extends Controller {
 
         // check the overall length of the address.
         if(address.length() > 254){
-            log.info("Overall address is too long. Length: {}", address.length());
+            log.debug("Overall address is too long. Length: {}", address.length());
             return String.format(Play.application().configuration().getString("msg.addressTooLongOverall"), address.length());
         }
 
         //check 'local' part for length.
         if(splitAddress[0].length() > 64){
-            log.info("Local part of address is too long. Length: {}", splitAddress[0].length());
+            log.debug("Local part of address is too long. Length: {}", splitAddress[0].length());
             return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0], splitAddress[0].length());
         }
 
