@@ -31,6 +31,13 @@ public class AddressServiceImpl implements AddressService {
         return false;
     }
 
+    @Transactional
+    public void deleteAddress(Address address){
+        // need to merge with entity in the DB.
+        address = em.merge(address);
+        em.remove(address);
+    }
+
     /**
      * Helper method to ensure that an insertion to the database doesn't exist already in the database.
      *

@@ -96,6 +96,19 @@ public class Application extends Controller {
     }
 
     /**
+     * Remove an address from the database. Address better be in there!
+     * @param address The address to be removed.
+     * @return Redirects to a redraw of the homepage. 
+     */
+    public Result deleteAddress(String address){
+        log.info("Deleting address: {}", address);
+        Address addr = new Address();
+        addr.setAddress(address);
+        addressService.deleteAddress(addr);
+        return redirect(routes.Application.index());
+    }
+
+    /**
      * Builds a list of the addresses in the DB. Used to display addresses in DB to user in index generation.
      */
     private List<Address> listAddress() {

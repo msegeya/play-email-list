@@ -1,36 +1,41 @@
 @(form: play.data.Form[forms.AddressForm], addressList: List[models.Address])
 
-    @main("Welcome to Play-Email-List") {
+@main("Welcome to Play-Email-List") {
 
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a id="titleLink" class="brand" href="/">Welcome to
-                        Play-Email-List</a>
-                </div>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a id="titleLink" class="brand" href="/">Welcome to
+                    Play-Email-List</a>
             </div>
         </div>
+    </div>
 
-        <div class="container">
-            <b>Addresses in List:</b>
-            @for(address <- addressList) {
-                <li>@address.getAddress</li>
-            }
-
-            @helper.form(action = routes.Application.addAddress, 'class -> "wellform-horizontal") {
-                @if(form.hasGlobalErrors) {
-                    <div>
-                        <p>
-                            <span>@Messages(form.globalError.message)</span>
-                        </p>
-                    </div>
-                }
-                <div>
-                    <b></b> @helper.inputText(form("address"), '_showConstraints -> false)
+    <div class="container">
+        <b>Addresses in List:</b>
+        @for(address <- addressList) {
+            @helper.form(action = routes.Application.deleteAddress(address.getAddress)) {
+                <li>
                     <input type="submit" class="btn btn-default" name="Go"
-                    value="Add to list">
-                    </button>
+                    value="Delete">
+                    @address.getAddress
+                </li>
+            }
+        }
+
+        @helper.form(action = routes.Application.addAddress, 'class -> "wellform-horizontal") {
+            @if(form.hasGlobalErrors) {
+                <div>
+                    <p>
+                        <span>@Messages(form.globalError.message)</span>
+                    </p>
                 </div>
             }
-        </div>
-    }
+            <div>
+                <b></b> @helper.inputText(form("address"), '_showConstraints -> false)
+                <input type="submit" class="btn btn-default" name="Go"
+                value="Add to list">
+            </div>
+        }
+    </div>
+}

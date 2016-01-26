@@ -15,7 +15,7 @@
         </encoder>
     </appender>
 
-    <logger name="controllers" level="DEBUG"/>
+    <logger name="controllers" level="INFO"/>
     <logger name="services" level="DEBUG"/>
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="org.springframework" level="WARN"/>
