@@ -2,9 +2,8 @@
 # ~~~~~
 msg.duplicate = Address already exists in the list.
 msg.noTLD = Address does not have valid domain i.e. '.com'
-msg.invalidTLD = Domain '%s' is not a valid Top Level Domain.
-msg.enterValidEmail = Please enter a valid email...
-msg.doublePeriod = Address cannot contain '..'
-msg.addressTooLongLocal = Local part of address is too long. Found: %s, Length: %d, Max length is 64 characters.
-msg.addressTooLongOverall = Address is too long. Length is: %d, Max length is 254 characters.
+msg.invalidTLD = Domain ''{0}'' is not a valid Top Level Domain.
+msg.doublePeriod = Address cannot contain ''..''
+msg.addressTooLongLocal = Local part of address is too long. Found: {0}, Length: {1}, Max length is 64 characters.
+msg.addressTooLongOverall = Address is too long. Length is: {0}, Max length is 254 characters.
 msg.addressNotMatch = Please enter a valid email.

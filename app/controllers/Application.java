@@ -12,10 +12,9 @@ import forms.AddressForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 
-import play.Play;
 import play.data.Form;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -147,7 +146,7 @@ public class Application extends Controller {
 
         // unable to validate TLD, return error.
         log.info("Unable to find domain: {}", domain);
-        return String.format(Play.application().configuration().getString("msg.invalidTLD"), domain.toLowerCase());
+        return Messages.get("msg.invalidTLD", domain.toLowerCase());
     }
 
     /**

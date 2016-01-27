@@ -3,8 +3,8 @@ package forms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import play.Play;
 import play.data.validation.Constraints.Required;
+import play.i18n.Messages;
 
 import java.util.regex.Pattern;
 
@@ -34,7 +34,7 @@ public class AddressForm {
      * Requires that the String does not contain '..' then splits string on periods.
      * Requires that result of split is at least length 2.
      * Then requires that the last substring from the split does not contain '@'.
-     *
+     * <p>
      * Does not check Top Level Domain validity.
      *
      * @return Null if String is an email, or message detailing why String is not an email.
@@ -52,7 +52,7 @@ public class AddressForm {
         // check the overall length of the address.
         if (address.length() > MAX_EMAIL_LENGTH) {
             log.debug("Overall address is too long. Length: {}", address.length());
-            return "msg.addressTooLongOverall";
+            return Messages.get("msg.addressTooLongOverall", address.length());
         }
 
         //split the address on the @
@@ -60,8 +60,7 @@ public class AddressForm {
         //check 'local' part for length.
         if (splitAddress[0].length() > MAX_LOCAL_LENGTH) {
             log.debug("Local part of address is too long. Length: {}", splitAddress[0].length());
-            return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0],
-                                 splitAddress[0].length());
+            return Messages.get("msg.addressTooLongLocal", splitAddress[0], splitAddress[0].length());
         }
 
         // Check for double period.
