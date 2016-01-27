@@ -12,13 +12,16 @@ import forms.AddressForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 
 import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for application.
@@ -32,7 +35,7 @@ import java.util.List;
 public class Application extends Controller {
 
     private final static Logger log = LoggerFactory.getLogger(Application.class);
-    private final List<TLD> tlds;
+    private final Map<String, TLD> tlds;
 
     // use injection to set up the addressService for talking to the database.
     @Autowired
@@ -40,7 +43,12 @@ public class Application extends Controller {
 
     @Autowired
     public Application(TLDService tldService) {
-        tlds = tldService.getAllTLDs();
+        // loop through all the TLDs stored in the DB and store them in the hashmap.
+        tlds = new HashMap<>();
+        for (TLD tld: tldService.getAllTLDs()) {
+            // ensure that all the TLD keys are in uppercase.
+            tlds.put(tld.getDomain().toUpperCase(), tld);
+        }
     }
 
     /**
@@ -74,6 +82,7 @@ public class Application extends Controller {
         }
         log.debug("Got new input: '{}'", form.get().getAddress());
 
+        // Couldn't validate TLD in form because Form doesn't have access to list of TLDs.
         String msg = validateTLD(form.get().getAddress());
         if (msg != null) {
             log.debug("Bad TLD.");
@@ -81,13 +90,12 @@ public class Application extends Controller {
             return badRequest(index.render(form, listAddress()));
         }
         // create a new address object to contain the information from the form.
-        Address address = new Address();
-        address.setAddress(form.get().getAddress());
+        Address address = new Address(form.get().getAddress());
 
         // try to add the address to the DB.
         // will return false if address was in DB, in which case we should inform the user.
         if (!addressService.addAddress(address)) {
-            form.reject("address", Play.application().configuration().getString("msg.duplicate"));
+            form.reject("address", "msg.duplicate");
             log.info("Address '{}' was already in DB. Notifying user.", address.getAddress());
             return badRequest(index.render(form, listAddress()));
         }
@@ -104,8 +112,7 @@ public class Application extends Controller {
      */
     public Result deleteAddress(String address) {
         log.info("Deleting address: {}", address);
-        Address addr = new Address();
-        addr.setAddress(address);
+        Address addr = new Address(address);
         addressService.deleteAddress(addr);
         return redirect(routes.Application.index());
     }
@@ -116,8 +123,9 @@ public class Application extends Controller {
      * Needs {@link Application#tlds} to be set for the class and contain a list of valid {@link TLD}s.
      * This can be set using {@link TLDService#getAllTLDs()}.
      * <p>
-     * Requires that result of split is at least length 2.
-     * Then requires that the last substring from the split does not contain '@'.
+     * Input string should have first been validated by {@link AddressForm#validate()}.
+     * <p>
+     *
      * Finally compares that substring against list of {@link TLD}s. If a match is found the string is accepted.
      *
      * @param address the email address as a String to validate.
@@ -125,27 +133,15 @@ public class Application extends Controller {
      */
     private String validateTLD(String address) {
         // try and grab from the '.' to the end
+        // can be liberal with not checking since validation should be preformed by the form.
         String[] splitAddress = address.split("\\.");
-        if (splitAddress.length <= 1) {
-            // if the array length is 1, there is no period.
-            return Play.application().configuration().getString("msg.noTLD");
-        }
-
         String domain = splitAddress[splitAddress.length - 1];
-        if (domain.contains("@")) {
-            // if the last substring contains an @ then the address was like: 'a.b@c'
-            return Play.application().configuration().getString("msg.noTLD");
-        }
-
         log.debug("Extracted domain: {} from Address: ", domain, address);
-        TLD toValidate = new TLD();
-        toValidate.setDomain(domain.toUpperCase());
 
-        log.debug("Checking the domain.");
-        // check if the TLD is in the list.
-        if (tlds.contains(toValidate)) {
+        // check if the TLD (as an uppercase) is in the list.
+        if (tlds.containsKey(domain.toUpperCase())) {
             log.debug("Found the domain.");
-            // TLD was in list. All is well: return null.
+            // TLD was in map. All is well: return null.
             return null;
         }
 

@@ -22,6 +22,7 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
+
     @Autowired
     private AddressService addressService;
 
@@ -29,9 +30,10 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     // also used as a helper method to test data storage service.
     @Test
     public void addAddressTest() {
-        Address addr = new Address();
-        addr.setAddress("address");
+        Address addr = new Address("address");
         addressService.addAddress(addr);
+
+        //TODO: change to fetch
         assertThat(addr.getAddress()).isEqualTo("address");
     }
 
@@ -40,7 +42,7 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void testAddAddressLonger() {
         List<Address> addressList = addressService.getAllAddresses();
         int size = addressList.size();
-        addAddressTest();
+        //TODO addAddressTest();
         addressList = addressService.getAllAddresses();
         assertThat(addressList.size()).isEqualTo(size + 1);
     }
@@ -48,13 +50,12 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     // tests that duplicate entries are not added to the database and returned as false.
     @Test
     public void addAddressDuplicateTest() {
-        Address a1 = new Address();
-        a1.setAddress("a");
-        Address a2 = new Address();
-        a2.setAddress("a");
+        Address a1 = new Address("a");
+        Address a2 = new Address("a");
         int initialSize = addressService.getAllAddresses().size();
         // first should be true since object is NOT in DB.
         assertThat(addressService.addAddress(a1)).isEqualTo(true);
+        //TODO assert size is zero ect.
         int secondSize = addressService.getAllAddresses().size();
         // second should be false since object IS in DB.
         assertThat(addressService.addAddress(a2)).isEqualTo(false);
@@ -65,14 +66,14 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(finalSize).isEqualTo(secondSize);
     }
 
-    // tests that adding a null object crashes as expected.
+    // tests that adding a null object throws exception as expected.
     @Test(expected = NullPointerException.class)
     public void addAddressNullObjectTest() {
         Address none = null;
         addressService.addAddress(none);
     }
 
-    // tests that adding an address that hasn't been initialized crashes as expected.
+    // tests that adding an address that hasn't been initialized throws exception  as expected.
     @Test(expected = IllegalArgumentException.class)
     public void addAddressNullStringTest() {
         Address nully = new Address();
@@ -81,19 +82,19 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void addAddressEmptyTest() {
-        Address empty = new Address();
-        empty.setAddress("");
+        Address empty = new Address("");
         addressService.addAddress(empty);
+        //// TODO: 1/27/16
     }
 
     // Tests that deleteAddress can delete items from the DB.
     @Test
     public void deleteAddressTest() {
-        Address a = new Address();
-        a.setAddress("a");
-        Address b = new Address();
-        b.setAddress("b");
+        Address a = new Address("a");
+        Address b = new Address("b");
         int initialSize = addressService.getAllAddresses().size();
+
+        // todo assert more sizes
         assertThat(addressService.addAddress(a)).isEqualTo(true);
         assertThat(addressService.addAddress(b)).isEqualTo(true);
         assertThat(addressService.getAllAddresses().size()).isEqualTo(2);
@@ -104,8 +105,7 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void deleteAddressNonexistentTest() {
-        Address a = new Address();
-        a.setAddress("a");
+        Address a = new Address("a");
         addressService.deleteAddress(a);
     }
 
@@ -120,4 +120,8 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
         Address a = new Address();
         addressService.deleteAddress(a);
     }
+
+    //todo delete of ""
+
+    //todo get all addresses
 }

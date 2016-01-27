@@ -1,9 +1,5 @@
 package forms;
 
-import models.TLD;
-
-import services.TLDService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +14,9 @@ import java.util.regex.Pattern;
  * address must pass play's{@link Required} validations.
  */
 public class AddressForm {
-    private final static Logger log = LoggerFactory.getLogger(AddressForm.class);
+    private static final Logger log = LoggerFactory.getLogger(AddressForm.class);
+    private static final int MAX_EMAIL_LENGTH = 254;
+    private static final int MAX_LOCAL_LENGTH = 64;
     // validate that the input is non-empty.
     @Required
     private String address;
@@ -34,6 +32,8 @@ public class AddressForm {
      * Checks that the overall length is less than 255.
      * Checks that the local length is less than 65.
      * Requires that the String does not contain '..' then splits string on periods.
+     * Requires that result of split is at least length 2.
+     * Then requires that the last substring from the split does not contain '@'.
      *
      * Does not check Top Level Domain validity.
      *
@@ -44,25 +44,21 @@ public class AddressForm {
 
         // verify address meets regex, stolen from Play's email validation, but removed length constraints since they were not helpful
         // and are enforced below.
-        final Pattern
-                        regex =
-                        java.util.regex.Pattern.compile(
-                                        "\\b[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\b");
+        final Pattern regex = Pattern.compile(
+                        "\\b[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\b");
         if (!regex.matcher(address).matches()) {
-            return Play.application().configuration().getString("msg.addressNotMatch");
+            return "msg.addressNotMatch";
+        }
+        // check the overall length of the address.
+        if (address.length() > MAX_EMAIL_LENGTH) {
+            log.debug("Overall address is too long. Length: {}", address.length());
+            return "msg.addressTooLongOverall";
         }
 
         //split the address on the @
         String[] splitAddress = address.split("@");
-
-        // check the overall length of the address.
-        if (address.length() > 254) {
-            log.debug("Overall address is too long. Length: {}", address.length());
-            return String.format(Play.application().configuration().getString("msg.addressTooLongOverall"), address.length());
-        }
-
         //check 'local' part for length.
-        if (splitAddress[0].length() > 64) {
+        if (splitAddress[0].length() > MAX_LOCAL_LENGTH) {
             log.debug("Local part of address is too long. Length: {}", splitAddress[0].length());
             return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0],
                                  splitAddress[0].length());
@@ -70,8 +66,22 @@ public class AddressForm {
 
         // Check for double period.
         if (address.contains("..")) {
-            return Play.application().configuration().getString("msg.doublePeriod");
+            return "msg.doublePeriod";
         }
+
+        // try and grab from the '.' to the end
+        splitAddress = address.split("\\.");
+        if (splitAddress.length <= 1) {
+            // if the array length must be greater than 1, there is no period.
+            return "msg.noTLD";
+        }
+
+        String domain = splitAddress[splitAddress.length - 1];
+        if (domain.contains("@")) {
+            // if the last substring contains an @ then the address was like: 'a.b@c'
+            return "msg.noTLD";
+        }
+
         return null;
     }
 
