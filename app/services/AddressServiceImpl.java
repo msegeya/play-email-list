@@ -1,15 +1,17 @@
 package services;
 
 import models.Address;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
 
 @Service
 public class AddressServiceImpl implements AddressService {

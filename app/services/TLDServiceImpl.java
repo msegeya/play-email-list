@@ -1,14 +1,16 @@
 package services;
 
 import models.TLD;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
 
 /**
  * Implementation of {@link TLDService}, provides method to get a list of all {@link TLD} objects stored in database.

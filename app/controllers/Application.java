@@ -1,18 +1,22 @@
 package controllers;
 
-import forms.AddressForm;
 import models.Address;
 import models.TLD;
+
+import services.AddressService;
+import services.TLDService;
+
+import views.html.index;
+
+import forms.AddressForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.AddressService;
-import services.TLDService;
-import views.html.index;
 
 import java.util.List;
 

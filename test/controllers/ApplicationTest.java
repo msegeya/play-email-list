@@ -1,19 +1,21 @@
 package controllers;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static play.test.Helpers.*;
+
 import configs.AppConfig;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 
 import java.util.HashMap;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static play.test.Helpers.*;
 
 /**
  * Simple (JUnit) tests that can call all parts of a play app. If you are interested in mocking a whole application, see the wiki

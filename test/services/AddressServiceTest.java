@@ -1,7 +1,11 @@
 package services;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import configs.AppConfig;
+
 import models.Address;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -10,8 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
 
 @ContextConfiguration(classes = {
                 AppConfig.class, config.TestDataConfig.class
