@@ -110,6 +110,19 @@ public class Application extends Controller {
         return redirect(routes.Application.index());
     }
 
+    /**
+     * Validate the Top level domain of an email address
+     * <p>
+     * Needs {@link Application#tlds} to be set for the class and contain a list of valid {@link TLD}s.
+     * This can be set using {@link TLDService#getAllTLDs()}.
+     * <p>
+     * Requires that result of split is at least length 2.
+     * Then requires that the last substring from the split does not contain '@'.
+     * Finally compares that substring against list of {@link TLD}s. If a match is found the string is accepted.
+     *
+     * @param address the email address as a String to validate.
+     * @return null if the top level domain is valid, or a string detailing why it is not.
+     */
     private String validateTLD(String address) {
         // try and grab from the '.' to the end
         String[] splitAddress = address.split("\\.");

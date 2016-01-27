@@ -30,16 +30,12 @@ public class AddressForm {
      * Validate that a {@link String} is an email address. Used in conjunction with @Required
      * validation on {@link AddressForm}.
      * <p>
-     * Needs {@link AddressForm#tlds} to be set for the class and contain a list of valid {@link TLD}s.
-     * This can be set using {@link TLDService#getAllTLDs()}.
-     * <p>
      * Checks that string passes initial regex (looks roughly like an email).
      * Checks that the overall length is less than 255.
      * Checks that the local length is less than 65.
      * Requires that the String does not contain '..' then splits string on periods.
-     * Requires that result of split is at least length 2.
-     * Then requires that the last substring from the split does not contain '@'.
-     * Finally compares that substring against list of {@link TLD}s. If a match is found the string is accepted.
+     *
+     * Does not check Top Level Domain validity.
      *
      * @return Null if String is an email, or message detailing why String is not an email.
      */
