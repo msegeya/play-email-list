@@ -119,12 +119,12 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     }
 
     @Test
-    public void deleteEmptyStringNonexistantTest(){
+    public void deleteEmptyStringNonexistantTest() {
         addressService.deleteAddress(new Address(""));
     }
 
     @Test
-    public void deleteEmptyStringTest(){
+    public void deleteEmptyStringTest() {
         Address a = new Address("");
         assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
         addressService.addAddress(a);
@@ -135,13 +135,13 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     // test that getAllAddresses returns an empty list if the DB is empty.
     @Test
-    public void getAllAddressesEmptyTest(){
+    public void getAllAddressesEmptyTest() {
         assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
     }
 
     // Test that an added address gets returned by getAllAddresses.
     @Test
-    public void getAllAddressesSingleTest(){
+    public void getAllAddressesSingleTest() {
         Address a = new Address("a");
         assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
         addressService.addAddress(a);
@@ -151,7 +151,7 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     // Test adding multiple addresses and ensure that they get returned by getAllAddresses.
     @Test
-    public void getAllAddressesMultipleTest(){
+    public void getAllAddressesMultipleTest() {
         Address a = new Address("a");
         Address b = new Address("b");
         assertThat(addressService.getAllAddresses().size()).isEqualTo(0);

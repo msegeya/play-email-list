@@ -34,7 +34,7 @@ import java.util.Map;
 public class Application extends Controller {
 
     private final static Logger log = LoggerFactory.getLogger(Application.class);
-    private final Map<String, TLD> tlds;
+    private final Map<String, Boolean> tlds;
 
     // use injection to set up the addressService for talking to the database.
     @Autowired
@@ -44,9 +44,9 @@ public class Application extends Controller {
     public Application(TLDService tldService) {
         // loop through all the TLDs stored in the DB and store them in the hashmap.
         tlds = new HashMap<>();
-        for (TLD tld: tldService.getAllTLDs()) {
+        for (TLD tld : tldService.getAllTLDs()) {
             // ensure that all the TLD keys are in uppercase.
-            tlds.put(tld.getDomain().toUpperCase(), tld);
+            tlds.put(tld.getDomain().toUpperCase(), true);
         }
     }
 
@@ -124,7 +124,7 @@ public class Application extends Controller {
      * <p>
      * Input string should have first been validated by {@link AddressForm#validate()}.
      * <p>
-     *
+     * <p>
      * Finally compares that substring against list of {@link TLD}s. If a match is found the string is accepted.
      *
      * @param address the email address as a String to validate.
