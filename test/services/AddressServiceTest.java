@@ -27,24 +27,20 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     private AddressService addressService;
 
     // Tests that an Address object can be created and used to store a string.
-    // also used as a helper method to test data storage service.
     @Test
     public void addAddressTest() {
-        Address addr = new Address("address");
-        addressService.addAddress(addr);
-
-        //TODO: change to fetch
-        assertThat(addr.getAddress()).isEqualTo("address");
+        addressService.addAddress(new Address("address"));
+        assertThat(addressService.getAllAddresses().get(0).getAddress()).isEqualTo("address");
     }
 
     // Tests that when an object is added to the data service the data service grows in length.
     @Test
     public void testAddAddressLonger() {
         List<Address> addressList = addressService.getAllAddresses();
-        int size = addressList.size();
-        //TODO addAddressTest();
+        assertThat(addressList.size()).isEqualTo(0);
+        addressService.addAddress(new Address("address"));
         addressList = addressService.getAllAddresses();
-        assertThat(addressList.size()).isEqualTo(size + 1);
+        assertThat(addressList.size()).isEqualTo(1);
     }
 
     // tests that duplicate entries are not added to the database and returned as false.
@@ -52,39 +48,34 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void addAddressDuplicateTest() {
         Address a1 = new Address("a");
         Address a2 = new Address("a");
-        int initialSize = addressService.getAllAddresses().size();
+        // ensure that we start with an empty DB.
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
         // first should be true since object is NOT in DB.
         assertThat(addressService.addAddress(a1)).isEqualTo(true);
-        //TODO assert size is zero ect.
-        int secondSize = addressService.getAllAddresses().size();
+        // we inserted 1 item, 1 + 0 = 1 in most cases.
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
         // second should be false since object IS in DB.
         assertThat(addressService.addAddress(a2)).isEqualTo(false);
-        int finalSize = addressService.getAllAddresses().size();
-        // secondSize should be 1 bigger than initialSize since an item was inserted.
-        assertThat(secondSize).isEqualTo(initialSize + 1);
-        // finalSize and secondSize should be equal because the second insert should fail.
-        assertThat(finalSize).isEqualTo(secondSize);
+        // the insert should have failed, so make sure the size is the same.
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
     }
 
     // tests that adding a null object throws exception as expected.
     @Test(expected = NullPointerException.class)
     public void addAddressNullObjectTest() {
-        Address none = null;
-        addressService.addAddress(none);
+        addressService.addAddress(null);
     }
 
     // tests that adding an address that hasn't been initialized throws exception  as expected.
     @Test(expected = IllegalArgumentException.class)
     public void addAddressNullStringTest() {
-        Address nully = new Address();
-        addressService.addAddress(nully);
+        addressService.addAddress(new Address());
     }
 
     @Test
     public void addAddressEmptyTest() {
-        Address empty = new Address("");
-        addressService.addAddress(empty);
-        //// TODO: 1/27/16
+        // This should work, since "" is a valid String.
+        addressService.addAddress(new Address(""));
     }
 
     // Tests that deleteAddress can delete items from the DB.
@@ -92,36 +83,83 @@ public class AddressServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void deleteAddressTest() {
         Address a = new Address("a");
         Address b = new Address("b");
-        int initialSize = addressService.getAllAddresses().size();
-
-        // todo assert more sizes
+        // ensure that we start with an empty DB.
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
         assertThat(addressService.addAddress(a)).isEqualTo(true);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
         assertThat(addressService.addAddress(b)).isEqualTo(true);
         assertThat(addressService.getAllAddresses().size()).isEqualTo(2);
+
         addressService.deleteAddress(a);
+        // make sure the right object was deleted.
+        assertThat(addressService.getAllAddresses().contains(a)).isEqualTo(false);
+        assertThat(addressService.getAllAddresses().contains(b)).isEqualTo(true);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
         addressService.deleteAddress(b);
-        assertThat(addressService.getAllAddresses().size()).isEqualTo(initialSize);
+        // make sure we deleted b.
+        assertThat(addressService.getAllAddresses().contains(b)).isEqualTo(false);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
     }
 
     @Test
     public void deleteAddressNonexistentTest() {
-        Address a = new Address("a");
-        addressService.deleteAddress(a);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+        addressService.deleteAddress(new Address("a"));
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void deleteAddressNullTest() {
-        Address a = null;
-        addressService.deleteAddress(a);
+        addressService.deleteAddress(null);
     }
 
     @Test(expected = javax.persistence.PersistenceException.class)
     public void deleteAddressNullStringTest() {
-        Address a = new Address();
-        addressService.deleteAddress(a);
+        addressService.deleteAddress(new Address());
     }
 
-    //todo delete of ""
+    @Test
+    public void deleteEmptyStringNonexistantTest(){
+        addressService.deleteAddress(new Address(""));
+    }
 
-    //todo get all addresses
+    @Test
+    public void deleteEmptyStringTest(){
+        Address a = new Address("");
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+        addressService.addAddress(a);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
+        addressService.deleteAddress(a);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+    }
+
+    // test that getAllAddresses returns an empty list if the DB is empty.
+    @Test
+    public void getAllAddressesEmptyTest(){
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+    }
+
+    // Test that an added address gets returned by getAllAddresses.
+    @Test
+    public void getAllAddressesSingleTest(){
+        Address a = new Address("a");
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+        addressService.addAddress(a);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
+        assertThat(addressService.getAllAddresses().get(0)).isEqualTo(a);
+    }
+
+    // Test adding multiple addresses and ensure that they get returned by getAllAddresses.
+    @Test
+    public void getAllAddressesMultipleTest(){
+        Address a = new Address("a");
+        Address b = new Address("b");
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(0);
+        addressService.addAddress(a);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(1);
+        assertThat(addressService.getAllAddresses().get(0)).isEqualTo(a);
+        addressService.addAddress(b);
+        assertThat(addressService.getAllAddresses().size()).isEqualTo(2);
+        assertThat(addressService.getAllAddresses().get(1)).isEqualTo(b);
+    }
 }
