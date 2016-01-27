@@ -13,6 +13,7 @@ import play.mvc.Result;
 import services.AddressService;
 import services.TLDService;
 import views.html.index;
+
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class Application extends Controller {
         log.debug("Got new input: '{}'", form.get().getAddress());
 
         String msg = validateTLD(form.get().getAddress());
-        if(msg != null){
+        if (msg != null) {
             log.debug("Bad TLD.");
             form.reject("address", msg);
             return badRequest(index.render(form, listAddress()));
@@ -93,10 +94,11 @@ public class Application extends Controller {
 
     /**
      * Remove an address from the database.
+     *
      * @param address The address to be removed.
      * @return Redirects to a redraw of the homepage.
      */
-    public Result deleteAddress(String address){
+    public Result deleteAddress(String address) {
         log.info("Deleting address: {}", address);
         Address addr = new Address();
         addr.setAddress(address);
@@ -104,7 +106,7 @@ public class Application extends Controller {
         return redirect(routes.Application.index());
     }
 
-    private String validateTLD(String address){
+    private String validateTLD(String address) {
         // try and grab from the '.' to the end
         String[] splitAddress = address.split("\\.");
         if (splitAddress.length <= 1) {

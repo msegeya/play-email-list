@@ -80,7 +80,7 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressLocal64(){
+    public void testAddAddressLocal64() {
         HashMap<String, String> map = new HashMap<>();
         map.put("Address", "local64aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@a.com");
 
@@ -95,9 +95,10 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressOAL254(){
+    public void testAddAddressOAL254() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("Address", "oal254@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com");
+        map.put("Address",
+                "oal254@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com");
 
         running(fakeApplication(), new Runnable() {
             @Override
@@ -110,7 +111,7 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressLocal65(){
+    public void testAddAddressLocal65() {
         HashMap<String, String> map = new HashMap<>();
         map.put("Address", "local65aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@a.com");
 
@@ -125,9 +126,10 @@ public class ApplicationTest extends WithApplication {
     }
 
     @Test
-    public void testAddAddressOAL255(){
+    public void testAddAddressOAL255() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("Address", "oal255@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com");
+        map.put("Address",
+                "oal255@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com");
 
         running(fakeApplication(), new Runnable() {
             @Override

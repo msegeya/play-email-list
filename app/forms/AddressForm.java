@@ -3,12 +3,10 @@ package forms;
 import models.TLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import play.Play;
 import play.data.validation.Constraints.Required;
 import services.TLDService;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -16,11 +14,14 @@ import java.util.regex.Pattern;
  * <p>
  * address must pass play's{@link Required} validations.
  */
-public class AddressForm{
+public class AddressForm {
+    private final static Logger log = LoggerFactory.getLogger(AddressForm.class);
     // validate that the input is non-empty.
     @Required
     private String address;
-    private final static Logger log = LoggerFactory.getLogger(AddressForm.class);
+
+    public AddressForm() {
+    }
 
     /**
      * Validate that a {@link String} is an email address. Used in conjunction with @Required
@@ -44,7 +45,10 @@ public class AddressForm{
 
         // verify address meets regex, stolen from Play's email validation, but removed length constraints since they were not helpful
         // and are enforced below.
-        final Pattern regex = java.util.regex.Pattern.compile("\\b[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\b");
+        final Pattern
+                        regex =
+                        java.util.regex.Pattern.compile(
+                                        "\\b[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\\b");
         if (!regex.matcher(address).matches()) {
             return Play.application().configuration().getString("msg.addressNotMatch");
         }
@@ -53,15 +57,16 @@ public class AddressForm{
         String[] splitAddress = address.split("@");
 
         // check the overall length of the address.
-        if(address.length() > 254){
+        if (address.length() > 254) {
             log.debug("Overall address is too long. Length: {}", address.length());
             return String.format(Play.application().configuration().getString("msg.addressTooLongOverall"), address.length());
         }
 
         //check 'local' part for length.
-        if(splitAddress[0].length() > 64){
+        if (splitAddress[0].length() > 64) {
             log.debug("Local part of address is too long. Length: {}", splitAddress[0].length());
-            return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0], splitAddress[0].length());
+            return String.format(Play.application().configuration().getString("msg.addressTooLongLocal"), splitAddress[0],
+                                 splitAddress[0].length());
         }
 
         // Check for double period.
@@ -69,9 +74,6 @@ public class AddressForm{
             return Play.application().configuration().getString("msg.doublePeriod");
         }
         return null;
-    }
-
-    public AddressForm(){
     }
 
     public String getAddress() {

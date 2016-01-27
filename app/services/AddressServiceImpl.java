@@ -33,10 +33,11 @@ public class AddressServiceImpl implements AddressService {
 
     /**
      * Deletes an address in the database. Does nothing if address is not in database.
+     *
      * @param address the {@link Address} object to remove.
      */
     @Transactional
-    public void deleteAddress(Address address){
+    public void deleteAddress(Address address) {
         // need to merge with entity in the DB.
         address = em.merge(address);
         em.remove(address);
